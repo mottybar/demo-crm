@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend_net
+    restart: unless-stopped
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Expose app on localhost:3000
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://root:example@mongo:27017/mydatabase
+        LOG_LEVEL="info"
+        PERSISTENCE="true"
+    networks:
+      - backend_net
+    restart: unless-stopped
+
+networks:
+  backend_net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local

@@ -1,37 +1,47 @@
 version: '3.8'
-
 services:
   mongo:
     image: mongo:6.0
     container_name: mongodb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: mydatabase  # Creates a database named "mydatabase"
     volumes:
       - mongo_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro  # Mount init script
     networks:
       - backend_net
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "mongo:27017/admin", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Expose app on localhost:3000
+      - "3000:3000"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     environment:
-      - MONGO_URI=mongodb://root:example@mongo:27017/mydatabase
-        LOG_LEVEL="info"
-        PERSISTENCE="true"
+      - MONGODB_URI=mongodb://mongo:27017
+      - LOG_LEVEL=info
+      - PERSISTENCE=true
     networks:
       - backend_net
     restart: unless-stopped
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 networks:
   backend_net:
     driver: bridge
-
 volumes:
   mongo_data:
     driver: local

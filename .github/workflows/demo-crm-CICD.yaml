@@ -1,0 +1,38 @@
+name: demo-crm CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci_build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t demo-crm-app:latest .
+
+      - name: Run Docker container
+        run: docker run -d -p 3000:3000 demo-crm-app:latest
+
+      - name: Check application
+        run: |
+          sleep 10
+          curl http://localhost:3000
+
+      - name: Configure AWS credentials
+        run: aws configure set aws_access_key_id ${{ secrets.ECR_ACCESS_KEY }} && aws configure set aws_secret_access_key ${{ secrets.ECR_SECRET_KEY }} && aws configure set region ap-south-1
+      - name: Authenticate Docker to AWS ECR
+        run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 061051240345.dkr.ecr.ap-south-1.amazonaws.com
+        # Authenticates Docker to AWS ECR using the AWS CLI.
+      - name: Tag Docker image
+        run: |
+          docker tag entrytracker-app:latest 061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/entrytracker:latest
+        # Tags the Docker image for the ECR repository.
+      - name: Push Docker image to ECR
+        run: docker push 061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/entrytracker:latest
+        # Pushes the Docker image to the specified ECR repository.

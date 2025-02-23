@@ -41,10 +41,8 @@ jobs:
 
           else
             # Extract major, minor, patch from the latest tag
-            major=$(echo $latest_tag | cut -d '.' -f 1)
-            minor=$(echo $latest_tag | cut -d '.' -f 2)
-            patch=$(echo $latest_tag | cut -d '.' -f 3)
-    
+            IFS='.' read -r major minor patch <<< "$latest_tag"
+
             # Increment the patch number by 1
             patch=$((patch + 1))
     

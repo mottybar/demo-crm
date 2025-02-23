@@ -12,12 +12,55 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get the latest tag from the repository and increment patch version
+        id: increment_version
+        run: |
+          # Fetch tags from the main branch
+          git fetch --tags --force --prune
+        
+          # List all tags for debugging
+          echo "Available tags in the repository:"
+          git tag -l
+
+          # Get the latest tag (format x.y.z, numbers only)
+          latest_tag=$(git tag -l | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -t. -k1,1nr -k2,2nr -k3,3nr | head -n 1)
+            echo "Latest tag: $latest_tag"
+
+    
+          # If no tags are found, set the version to 1.0.0
+          if [ -z "$latest_tag" ]; then
+            new_tag="1.0.0"
+        
+
+
+          else
+            # Extract major, minor, patch from the latest tag
+            major=$(echo $latest_tag | cut -d '.' -f 1)
+            minor=$(echo $latest_tag | cut -d '.' -f 2)
+            patch=$(echo $latest_tag | cut -d '.' -f 3)
+    
+            # Increment the patch number by 1
+            patch=$((patch + 1))
+    
+            # Form the new tag
+            new_tag="${major}.${minor}.${patch}"
+          fi
+    
+           echo "New version tag: $new_tag"
+    
+          # Set the new version as output for later use
+          echo "::set-output name=new_tag::$new_tag"
+          git tag "$new_tag"
+          git push origin "$new_tag"
 
       - name: Build Docker image
-        run: docker build -t demo-crm:latest .
+        run: docker build -t demo-crm:${{ steps.increment_version.outputs.new_tag }} .
 
       - name: Run Docker container
-        run: docker run -d -p 3000:3000 demo-crm:latest
+        run: docker run -d -p 3000:3000 demo-crm:${{ steps.increment_version.outputs.new_tag }}
 
       - name: Check application
         run: |
@@ -31,8 +74,8 @@ jobs:
         # Authenticates Docker to AWS ECR using the AWS CLI.
       - name: Tag Docker image
         run: |
-          docker tag demo-crm:latest 061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:latest
+          docker tag demo-crm:${{ steps.increment_version.outputs.new_tag }} 061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:${{ steps.increment_version.outputs.new_tag }}
         # Tags the Docker image for the ECR repository.
       - name: Push Docker image to ECR
-        run: docker push 061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:latest
+        run: docker push 061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:${{ steps.increment_version.outputs.new_tag }}
         # Pushes the Docker image to the specified ECR repository.

@@ -41,7 +41,7 @@ jobs:
           echo "Application failed to start!"
           exit 1 
   package:
-    name: Build and Test
+    name: package to docker 
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

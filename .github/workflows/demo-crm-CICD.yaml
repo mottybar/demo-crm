@@ -17,7 +17,7 @@ jobs:
         run: docker build -t demo-crm:latest .
 
       - name: Run Docker container
-        run: docker run -d -p 3000:3000 demo-crm-app:latest
+        run: docker run -d -p 3000:3000 demo-crm:latest
 
       - name: Check application
         run: |

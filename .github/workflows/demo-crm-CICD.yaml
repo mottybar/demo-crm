@@ -12,8 +12,6 @@ jobs:
   build_and_test:
     name: Build and Test
     runs-on: ubuntu-latest
-    outputs:
-      new_tag: ${{ steps.increment_version.outputs.new_tag }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -44,8 +42,6 @@ jobs:
     name: package E2E publish
     runs-on: ubuntu-latest
     needs: build_and_test
-    outputs:
-      VERSION_TAG: ${{ steps.increment_version.outputs.NEW_TAG }}  # Pass version to other jobs
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -65,8 +61,7 @@ jobs:
           # Get the latest tag (format x.y.z, numbers only)
           latest_tag=$(git tag -l | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -t. -k1,1nr -k2,2nr -k3,3nr | head -n 1)
             echo "Latest tag: $latest_tag"
-
-    
+            
           # If no tags are found, set the version to 1.0.0
           if [ -z "$latest_tag" ]; then
             new_tag="1.0.0"
@@ -86,8 +81,6 @@ jobs:
     
           # Use environment files instead of set-output for later use
           echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
-          # Pass to next jobs
-          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
           # Create and push the new tag
           git tag "$new_tag"
           git push origin "$new_tag"
@@ -132,16 +125,6 @@ jobs:
       - name: Remove testing environment
         run: docker compose down
 
-  push_to_ecr:
-    name: push_to_ecr
-    runs-on: ubuntu-latest
-    needs: 
-    - build_and_test
-    - package_E2E_publish
-    env:
-      VERSION_TAG: ${{ needs.package_E2E_publish.outputs.VERSION_TAG }}  # Use the version from previous job
-
-    steps:
       - name: Configure AWS credentials
         run: aws configure set aws_access_key_id ${{ secrets.ECR_ACCESS_KEY }} && aws configure set aws_secret_access_key ${{ secrets.ECR_SECRET_KEY }} && aws configure set region ap-south-1
       - name: Authenticate Docker to AWS ECR

@@ -87,7 +87,7 @@ jobs:
           # Use environment files instead of set-output for later use
           echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
           # Pass to next jobs
-          echo "::set-output name=NEW_TAG::$new_tag"  
+          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
           # Create and push the new tag
           git tag "$new_tag"
           git push origin "$new_tag"
@@ -139,7 +139,7 @@ jobs:
     - build_and_test
     - package_E2E_publish
     env:
-      VERSION_TAG: ${{ needs.build_and_test.outputs.VERSION_TAG }}  # Use the version from previous job
+      VERSION_TAG: ${{ needs.package_E2E_publish.outputs.VERSION_TAG }}  # Use the version from previous job
 
     steps:
       - name: Configure AWS credentials

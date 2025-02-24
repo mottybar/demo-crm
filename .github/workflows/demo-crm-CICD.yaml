@@ -68,8 +68,6 @@ jobs:
           if [ -z "$latest_tag" ]; then
             new_tag="1.0.0"
         
-
-
           else
             # Extract major, minor, patch from the latest tag
             IFS='.' read -r major minor patch <<< "$latest_tag"
@@ -99,6 +97,31 @@ jobs:
         run: |
           sleep 10 # Give time for the app to start
           curl http://localhost:3000 # Verify the application is reachable
+
+       # **Stop Docker container** (before starting the test environment)
+      - name: Stop Docker container
+        run: docker stop $(docker ps -q)
+
+      # **Start Testing Environment** (docker-compose)
+      - name: Start testing environment
+        run: docker compose up -d
+
+      # Wait for services to be ready
+      - name: Wait for services to be ready
+        run: sleep 10  # Give time for services to start
+
+      # **Run End-to-End API Tests**
+      - name: Run API Tests (GET, POST, DELETE)
+        run: |
+          echo "Running API tests..."
+          
+          # Test GET request
+          echo "Testing GET request..."
+          curl -X GET http://localhost:3000/api/clients -w "\n"
+
+          # Test POST request
+          echo "Testing POST request..."
+          curl -X POST http://localhost:3000/api/clients -H "Content-Type: application/json" -d '{"name":"Test Item"}' -w "\n"
 
       - name: Configure AWS credentials
         run: aws configure set aws_access_key_id ${{ secrets.ECR_ACCESS_KEY }} && aws configure set aws_secret_access_key ${{ secrets.ECR_SECRET_KEY }} && aws configure set region ap-south-1

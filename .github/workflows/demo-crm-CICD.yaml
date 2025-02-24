@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build_and_test:
-    name: Build and Test Application
+    name: Build and Test
     runs-on: ubuntu-latest
     outputs:
       new_tag: ${{ steps.increment_version.outputs.new_tag }}
@@ -41,7 +41,7 @@ jobs:
           echo "Application failed to start!"
           exit 1 
   package_and_E2E:
-    name: package to docker 
+    name: package and E2E
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

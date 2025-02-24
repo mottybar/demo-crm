@@ -122,6 +122,10 @@ jobs:
           # Test POST request
           echo "Testing POST request..."
           curl -X POST http://localhost:3000/api/clients -H "Content-Type: application/json" -d '{"name":"Test Item"}' -w "\n"
+      
+      #  **Cleanup: Remove Testing Environment**
+      - name: Remove testing environment
+        run: docker compose down
 
       - name: Configure AWS credentials
         run: aws configure set aws_access_key_id ${{ secrets.ECR_ACCESS_KEY }} && aws configure set aws_secret_access_key ${{ secrets.ECR_SECRET_KEY }} && aws configure set region ap-south-1

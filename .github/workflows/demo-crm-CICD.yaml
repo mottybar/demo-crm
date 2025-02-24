@@ -43,6 +43,8 @@ jobs:
   package_and_E2E:
     name: package and E2E
     runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.increment_version.outputs.new_tag }}
     needs: build_and_test
     steps:
       - name: Check out code

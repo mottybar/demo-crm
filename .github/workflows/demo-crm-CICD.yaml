@@ -99,8 +99,10 @@ jobs:
           curl http://localhost:3000 # Verify the application is reachable
 
        # **Stop Docker container** (before starting the test environment)
-      - name: remove Docker container
-        run: docker rm $(docker ps -q)
+      - name: stop and remove Docker container
+        run: | 
+          docker stop $(docker ps -q)
+          docker rm $(docker ps -q)
 
       # **Start Testing Environment** (docker-compose)
       - name: Start testing environment

@@ -40,7 +40,7 @@ jobs:
 
           echo "Application failed to start!"
           exit 1 
-  package:
+  package_and_E2E:
     name: package to docker 
     runs-on: ubuntu-latest
     steps:
@@ -99,8 +99,8 @@ jobs:
           curl http://localhost:3000 # Verify the application is reachable
 
        # **Stop Docker container** (before starting the test environment)
-      - name: Stop Docker container
-        run: docker stop $(docker ps -q)
+      - name: remove Docker container
+        run: docker rm $(docker ps -q)
 
       # **Start Testing Environment** (docker-compose)
       - name: Start testing environment
@@ -111,7 +111,7 @@ jobs:
         run: sleep 10  # Give time for services to start
 
       # **Run End-to-End API Tests**
-      - name: Run API Tests (GET, POST, DELETE)
+      - name: Run API Tests (GET, POST)
         run: |
           echo "Running API tests..."
           

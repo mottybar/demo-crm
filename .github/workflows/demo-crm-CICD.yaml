@@ -41,7 +41,7 @@ jobs:
           echo "Application failed to start!"
           exit 1 
   package_E2E_publish:
-    name: package_E2E_publish
+    name: package E2E publish
     runs-on: ubuntu-latest
     needs: build_and_test
     steps:

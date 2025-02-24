@@ -43,8 +43,6 @@ jobs:
   package_and_E2E:
     name: package and E2E
     runs-on: ubuntu-latest
-    outputs:
-      new_tag: ${{ steps.increment_version.outputs.new_tag }}
     needs: build_and_test
     steps:
       - name: Check out code
@@ -130,15 +128,6 @@ jobs:
       - name: Remove testing environment
         run: docker compose down
 
-  publish:
-    name: Publish to ECR
-    runs-on: ubuntu-latest
-    outputs:
-      new_tag: ${{ steps.increment_version.outputs.new_tag }}
-    needs: 
-      - build_and_test
-      - package_and_E2E
-    steps:
       - name: Configure AWS credentials
         run: aws configure set aws_access_key_id ${{ secrets.ECR_ACCESS_KEY }} && aws configure set aws_secret_access_key ${{ secrets.ECR_SECRET_KEY }} && aws configure set region ap-south-1
       - name: Authenticate Docker to AWS ECR

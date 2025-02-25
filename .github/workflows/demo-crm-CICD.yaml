@@ -94,7 +94,7 @@ jobs:
         run: docker save -o demo-crm.tar demo-crm:${{ env.NEW_TAG }}
 
       - name: Upload Docker image as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: demo-crm-image
           path: demo-crm.tar
@@ -147,7 +147,7 @@ jobs:
 
     steps:
       - name: Download Docker image artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: demo-crm-image
 

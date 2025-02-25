@@ -38,8 +38,8 @@ jobs:
 
           echo "Application failed to start!"
           exit 1 
-  package_E2E_publish:
-    name: package E2E publish
+  package_and_E2E:
+    name: package and E2E 
     runs-on: ubuntu-latest
     needs: build_and_test
     outputs:
@@ -143,9 +143,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build_and_test
-      - package_E2E_publish
+      - package_and_E2E
     env:
-      VERSION_TAG: ${{ needs.package_E2E_publish.outputs.VERSION_TAG }}
+      VERSION_TAG: ${{ needs.package_and_E2E.outputs.VERSION_TAG }}
 
     steps:
       - name: Download Docker image artifact

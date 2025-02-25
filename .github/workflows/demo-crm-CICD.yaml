@@ -84,6 +84,8 @@ jobs:
           # Use environment files instead of set-output for later use
           echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
           # Create and push the new tag
+          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
+          # Pass to next jobs
           git tag "$new_tag"
           git push origin "$new_tag"
 

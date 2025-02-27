@@ -184,8 +184,7 @@ jobs:
     
       - name: Setup Kubeconfig
         run: |
-          mkdir -p ~/.kube
-          echo "$KUBE_CONFIG" > ~/.kube/config
+          echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
       - name: Update Kubernetes Deployment

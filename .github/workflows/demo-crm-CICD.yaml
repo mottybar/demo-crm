@@ -167,3 +167,30 @@ jobs:
       - name: Push Docker image to ECR
         run: docker push 061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:$VERSION_TAG
         # Pushes the Docker image to the specified ECR repository.
+
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: push_to_ecr
+    env:
+      VERSION_TAG: ${{ needs.package_E2E_publish.outputs.VERSION_TAG }}  
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}  # Store your Kube config in GitHub secrets
+    steps:
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+    
+      - name: Setup Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "$KUBE_CONFIG" > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Update Kubernetes Deployment
+        run: |
+          kubectl set image deployment/demo-crm demo-crm=061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:$VERSION_TAG --record
+
+      - name: Verify Deployment
+        run: kubectl rollout status deployment/demo-crm

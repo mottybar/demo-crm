@@ -176,6 +176,9 @@ jobs:
       VERSION_TAG: ${{ needs.package_E2E_publish.outputs.VERSION_TAG }}  
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}  # # Store base64-encoded kubeconfig in GitHub secrets
     steps:
+      - name: Configure AWS credentials
+        run: aws configure set aws_access_key_id ${{ secrets.ECR_ACCESS_KEY }} && aws configure set aws_secret_access_key ${{ secrets.ECR_SECRET_KEY }} && aws configure set region ap-south-1
+      
       - name: Install kubectl
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"

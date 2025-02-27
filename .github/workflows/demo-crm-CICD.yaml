@@ -171,9 +171,12 @@ jobs:
   deploy:
     name: Deploy to Kubernetes
     runs-on: ubuntu-latest
-    needs: push_to_ecr
+    needs: 
+    - build_and_test
+    - package_and_E2E
+    - push_to_ecr
     env:
-      VERSION_TAG: ${{ needs.package_E2E_publish.outputs.VERSION_TAG }}  
+      VERSION_TAG: ${{ needs.package_and_E2E.outputs.VERSION_TAG }}  
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}  # # Store base64-encoded kubeconfig in GitHub secrets
     steps:
       - name: Configure AWS credentials
@@ -196,4 +199,4 @@ jobs:
           kubectl set image deployment/demo-crm-deployment demo-crm=061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:$VERSION_TAG --record
 
       - name: Verify Deployment
-        run: kubectl rollout status deployment/demo-crm
+        run: kubectl rollout status deployment/demo-crm-deployment

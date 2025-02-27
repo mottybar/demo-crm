@@ -193,7 +193,7 @@ jobs:
 
       - name: Update Kubernetes Deployment
         run: |
-          kubectl set image deployment/demo-crm demo-crm=061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:$VERSION_TAG --record
+          kubectl set image deployment/demo-crm-deployment demo-crm=061051240345.dkr.ecr.ap-south-1.amazonaws.com/development/demo-crm:$VERSION_TAG --record
 
       - name: Verify Deployment
         run: kubectl rollout status deployment/demo-crm

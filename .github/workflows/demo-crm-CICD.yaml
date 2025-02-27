@@ -174,7 +174,7 @@ jobs:
     needs: push_to_ecr
     env:
       VERSION_TAG: ${{ needs.package_E2E_publish.outputs.VERSION_TAG }}  
-      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}  # Store your Kube config in GitHub secrets
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}  # # Store base64-encoded kubeconfig in GitHub secrets
     steps:
       - name: Install kubectl
         run: |

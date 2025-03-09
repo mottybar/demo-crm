@@ -38,9 +38,11 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+
 networks:
   backend_net:
     driver: bridge
+
 volumes:
   mongo_data:
     driver: local

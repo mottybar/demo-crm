@@ -1,101 +1,133 @@
-The portfolio project should contain/demonstrate several aspects:
+# 📘 Portfolio Project Overview
 
-A SaaS application
-A CI/CD workflow
-Public cloud based infrastructure
-Micro-service based deployment/architecture
+This portfolio project is designed to demonstrate your capabilities in modern DevOps practices including SaaS application development, CI/CD, cloud infrastructure, and microservices deployment.
 
+---
 
-Tools & Technologies
-Source Code Management: GitHub
-Development: Python Flask with REST API
-Containerization: Docker
-CI/CD: GitHub Actions
-Scripting: Bash
-Database: MongoDB
-Docker image registry: ECR
-Provision Infrastructure as Code with Terraform:
-AWS as cloud provider
+## ✅ Project Requirements
 
+The project should demonstrate the following aspects:
 
-Git Repository Structure
-Implement your work in multiple private Git repositories:
+- ✅ A SaaS application
+- ✅ A CI/CD workflow
+- ✅ Public cloud-based infrastructure
+- ✅ Microservices-based deployment/architecture
 
-'Application' repository to manage source code, CI/CD workflows
-'Infrastructure' repository to manage Terraform files
-'Cluster Resources' repository to manage your Kubernetes resources yaml files and Helm Charts (in the future you will create this to your application Helm Chart)
+---
 
+## 🛠 Tools & Technologies
 
-Create Architecture Diagrams
-Create two main diagrams:
+| Category                  | Tools / Technologies                                |
+|---------------------------|-----------------------------------------------------|
+| Source Code Management    | GitHub                                              |
+| Development               | Python Flask with REST API                          |
+| Containerization          | Docker                                              |
+| CI/CD                     | GitHub Actions                                      |
+| Scripting                 | Bash                                                |
+| Database                  | MongoDB                                             |
+| Docker Image Registry     | Amazon ECR                                          |
+| Infrastructure as Code    | Terraform                                           |
+| Cloud Provider            | AWS                                                 |
 
-2-tier application architecture (application + database)
-Complete workflow architecture including:
-Git repositories
-GitHub Actions as a CI tool
-Infrastructure components
-Kubernetes deployment - application and supporting services
+---
 
+## 📁 Git Repository Structure
 
-Application Development
-For this project you may use one of the following application options:
+Implement your project using **multiple Git repositories** (private):
 
-1. DemoCRM(MongoDB) from the following file:
+1. **Application Repository**
+   - Purpose: Manage source code and CI/CD workflows
+2. **Infrastructure Repository**
+   - Purpose: Manage Terraform code for AWS infrastructure
+3. **Cluster Resources Repository**
+   - Purpose: Manage Kubernetes YAMLs and Helm Charts  
+   - (Later include your own Helm chart for the application)
 
+---
 
+## 🧭 Architecture Diagrams
 
-Demo CRM source code
-A slight re-write from the original repo
-demo-crm-main.zip
+Create **two primary diagrams**:
 
+### 🧱 1. 2-Tier Application Architecture
 
-2. Fork from WorkProfile(MySQL) repository.
+- Frontend/Backend
+- Database (MongoDB)
 
-3. Develop your own by the following instructions.
+### 🔄 2. Complete Workflow Architecture
 
-Use a simple REST API service with database interaction:
+Include:
+- Git repositories
+- GitHub Actions (CI)
+- AWS infrastructure components
+- Kubernetes deployment: Application + supporting services
 
-Example endpoints:
+---
 
-GET /person: Return an array of people and their details (JSON) by ID
-POST /person/{id}: Adds a person with their details (JSON) to the database
-Keep in mind - the application is not the focus of the project
+## 👨‍💻 Application Development
 
-Docker Implementation
-Create a Dockerfile for efficient runtime image
-Develop docker-compose.yaml for:
-Local development - verify your application works with a database in a simple, local environment
-Mimic end to end testing environment in CI workflow
+You may choose one of the following application approaches:
 
+### Option 1: DemoCRM (MongoDB)
+- Based on the provided `demo-crm-main.zip`
+- Perform minor refactoring from the original repo
 
-CI/CD Workflow
-Implement a GitHub Actions workflow only for branch main (production environment) with multiple stages:
+### Option 2: Fork WorkProfile (MySQL)
 
-Notice: Production environments are delicate and usually won't include fully automated CD workflow.
-As a first step we work with only one branch 'main'. Later as a bonus additional branches may be added.  
-Clone/Pull
-Build the application
-Unit tests (Mimic)
-Package (Docker image)
-End-to-end testing (Mimic)
-Deploy the testing environment (docker compose up)
-API endpoint testing (GET, POST, DELETE)
-Remove testing environment
-Publish to ECR
-Deploy the new version in your running environment
+### Option 3: Build Your Own Application
+Use a simple REST API service that interacts with a database.  
+**Example Endpoints**:
+- `GET /person`: Return list of people (JSON)
+- `POST /person/{id}`: Add a new person to the database
 
+> 🔹 _Note: The application is **not** the main focus of the project._
 
-Kubernetes Setup
-With Terraform, deploy an EKS cluster in AWS using 1 node of t3a.medium (if you need more please consult with your mentor)
-Manually connect to your cluster and deploy your application and additional micro-services
-Expose your application Deployment with the proper Service to allow end-users access
+---
 
+## 🐳 Docker Implementation
 
+- Create a **Dockerfile** for efficient runtime image
+- Write a `docker-compose.yaml` for:
+  - Local development (app + database)
+  - End-to-end testing environment (mimicked in CI)
 
-Project Management Tips
-Organize your tasks and define clear priorities (Use Trello)
-Complete mandatory requirements before bonuses (see next lesson)
-The application is not the focus of the project
-It's recommended to start with diagrams to provide the full scale of the project
-Consult a mentor for using additional tools and resources
+---
+
+## 🔁 CI/CD Workflow with GitHub Actions
+
+Target only the `main` branch (production).
+
+### 🎯 Workflow Stages:
+
+1. Clone/Pull code
+2. Build the application
+3. Unit tests (mocked)
+4. Package Docker image
+5. End-to-end testing (mocked)
+6. Deploy testing environment (`docker compose up`)
+7. Run API endpoint tests (GET, POST, DELETE)
+8. Tear down test environment
+9. Push image to ECR
+10. Deploy new version to your environment
+
+> ⚠️ Production environments are delicate—start with single-branch (`main`) workflows only.
+
+---
+
+## ☸️ Kubernetes Setup
+
+- Use **Terraform** to deploy an **EKS cluster on AWS**
+- Node type: `t3a.medium` (1 node)
+- Deploy application and microservices manually
+- Expose the Deployment with a Kubernetes Service to allow public access
+
+---
+
+## 🗂 Project Management Tips
+
+- Use **Trello** to track tasks and define priorities
+- Focus on mandatory requirements first
+- Start with diagrams for better planning
+- The application itself is a means to demonstrate the platform—keep it simple
+- Reach out to mentors if using additional tools/resources
 

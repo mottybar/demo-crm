@@ -100,4 +100,3 @@ The application is not the focus of the project
 It's recommended to start with diagrams to provide the full scale of the project
 Consult a mentor for using additional tools and resources
 
-Next Lesson

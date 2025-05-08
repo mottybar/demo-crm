@@ -1,4 +1,3 @@
-Overview
 The portfolio project should contain/demonstrate several aspects:
 
 A SaaS application

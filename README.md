@@ -80,7 +80,6 @@ Use a simple REST API service that interacts with a database.
 - `GET /person`: Return list of people (JSON)
 - `POST /person/{id}`: Add a new person to the database
 
-> 🔹 _Note: The application is **not** the main focus of the project._
 
 ---
 
@@ -110,8 +109,6 @@ Target only the `main` branch (production).
 9. Push image to ECR
 10. Deploy new version to your environment
 
-> ⚠️ Production environments are delicate—start with single-branch (`main`) workflows only.
-
 ---
 
 ## ☸️ Kubernetes Setup
@@ -120,14 +117,4 @@ Target only the `main` branch (production).
 - Node type: `t3a.medium` (1 node)
 - Deploy application and microservices manually
 - Expose the Deployment with a Kubernetes Service to allow public access
-
----
-
-## 🗂 Project Management Tips
-
-- Use **Trello** to track tasks and define priorities
-- Focus on mandatory requirements first
-- Start with diagrams for better planning
-- The application itself is a means to demonstrate the platform—keep it simple
-- Reach out to mentors if using additional tools/resources
 
